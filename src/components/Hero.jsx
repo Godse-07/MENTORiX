@@ -1,9 +1,34 @@
+"use client"
+
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from './ui/button'
 import Image from 'next/image'
+import { useRef } from 'react'
 
 function Herosection() {
+
+  const ImageRef = useRef(null)
+
+  useEffect(()=> {
+    const imageElement = ImageRef.current
+    
+    const scrollThreshold = 100
+    const handleScroll = () => {
+
+      const scrollPos = window.scrollY
+    if(scrollPos > scrollThreshold) {
+      imageElement.classList.add("scrolled")
+    }else{
+      imageElement.classList.remove("scrolled")
+    }
+  }
+  window.addEventListener('scroll', handleScroll)
+  return () => {
+    window.removeEventListener('scroll', handleScroll)
+  }
+  }, [])
+
   return (
     <section className='w-full pt-36 md:pt-48 pb-10'>
       <div className='space-y-6 text-center'>
@@ -26,15 +51,17 @@ function Herosection() {
         </div>
 
         {/* Banner Image */}
-        <div className="flex justify-center items-center w-full">
-          <Image 
-            src={'/banner1.jpg'}
-            width={1280}
-            height={720}
-            alt="Dashboard preview"
-            className='rounded-lg shadow-2xl border mx-auto object-cover max-w-full'
-            priority={true}
-          />
+        <div className='hero-image-wrapper mt-3 md:mt-0'>
+          <div ref={ImageRef} className="flex justify-center items-center w-full hero-image">
+            <Image 
+              src={'/banner1.jpg'}
+              width={1280}
+              height={720}
+              alt="Dashboard preview"
+              className='rounded-lg shadow-2xl border mx-auto object-cover max-w-full'
+              priority={true}
+            />
+          </div>
         </div>
       </div>
     </section>
